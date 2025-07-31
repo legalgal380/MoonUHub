@@ -133,9 +133,9 @@ local RbgNameToggle = PlayerTab:Toggle({
     end
 }
 
-local RbgBioToggle = PlayerTab:Toggle({
-    Title = "Rbg de bio",
-    Desc = "Dá um rbg na bio",
+local RbgNameToggle = PlayerTab:Toggle({
+    Title = "Rbg de nome",
+    Desc = "Dá um rbg no nome",
     Icon = "bird",
     Type = "Checkbox",
     Default = false,
@@ -152,7 +152,7 @@ local RbgBioToggle = PlayerTab:Toggle({
 
                         local color = Color3.fromHSV(hue, 1, 1)
                         local args = {
-                            "PickingRPBioColor",
+                            "PickingRPNameColor",
                             color
                         }
                         game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
@@ -161,15 +161,14 @@ local RbgBioToggle = PlayerTab:Toggle({
                 end
             end)
         else
-            -- Quando desativar, seta a cor para branco
             local args = {
                 "PickingRPNameColor",
                 Color3.fromRGB(255, 255, 255)
             }
-            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Player1sCa1r"):FireServer(unpack(args))
+            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
         end
     end
-}
+})
 
 
 local RbgCarToggle = PlayerTab:Toggle({
@@ -208,5 +207,5 @@ local RbgCarToggle = PlayerTab:Toggle({
             game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Player1sCa1r"):FireServer(unpack(args))
         end
     end
-            }
-            
+})
+    
