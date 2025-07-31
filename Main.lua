@@ -39,7 +39,7 @@ local PlayerTab = Window:Tab({
     Locked = false,
 })
 local PlayersTab = Window:Tab({
-    Title = "Player",
+    Title = "Players",
     Icon = "users",
     Locked = false,
 })
@@ -131,4 +131,82 @@ local RbgNameToggle = PlayerTab:Toggle({
             game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
         end
     end
-})
+}
+
+local RbgBioToggle = PlayerTab:Toggle({
+    Title = "Rbg de bio",
+    Desc = "Dá um rbg na bio",
+    Icon = "bird",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state)
+        isRGBActive = state
+
+        if isRGBActive then
+            task.spawn(function()
+                while isRGBActive do
+                    for hue = 0, 1, 0.01 do
+                        if not isRGBActive then
+                            break
+                        end
+
+                        local color = Color3.fromHSV(hue, 1, 1)
+                        local args = {
+                            "PickingRPBioColor",
+                            color
+                        }
+                        game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
+                        task.wait(0.02)
+                    end
+                end
+            end)
+        else
+            -- Quando desativar, seta a cor para branco
+            local args = {
+                "PickingRPNameColor",
+                Color3.fromRGB(255, 255, 255)
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Player1sCa1r"):FireServer(unpack(args))
+        end
+    end
+}
+
+
+local RbgCarToggle = PlayerTab:Toggle({
+    Title = "Rbg de carro",
+    Desc = "Dá um rbg no carro(apenas Premium)",
+    Icon = "bird",
+    Type = "Checkbox",
+    Default = false,
+    Callback = function(state)
+        isRGBActive = state
+
+        if isRGBActive then
+            task.spawn(function()
+                while isRGBActive do
+                    for hue = 0, 1, 0.01 do
+                        if not isRGBActive then
+                            break
+                        end
+
+                        local color = Color3.fromHSV(hue, 1, 1)
+                        local args = {
+                            "PickingRPNameColor",
+                            color
+                        }
+                        game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
+                        task.wait(0.02)
+                    end
+                end
+            end)
+        else
+            -- Quando desativar, seta a cor para branco
+            local args = {
+                "PickingRPNameColor",
+                Color3.fromRGB(255, 255, 255)
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Player1sCa1r"):FireServer(unpack(args))
+        end
+    end
+            }
+            
