@@ -16,7 +16,7 @@ end
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
-    Title = "Moon hub",
+    Title = "MoonU hub",
     Icon = "moon",
     Author = "Por BloxerOfc",
     Folder = "MoonUHub",
@@ -51,7 +51,12 @@ Window:SelectTab(1)
 PlayerTab:Slider({
     Title = "Velocidade do jogador",
     Step = 1,
-    Value = { Min = 16, Max = 888, Default = 16 },
+    
+    Value = {
+        Min = 16,
+        Max = 888,
+        Default = 16,
+    },
     Callback = function(value)
         Character.Humanoid.WalkSpeed = value
     end
@@ -59,8 +64,11 @@ PlayerTab:Slider({
 
 PlayerTab:Slider({
     Title = "Força do pulo do jogador",
-    Step = 1,
-    Value = { Min = 50, Max = 1200, Default = 50 },
+    Value = {
+        Min = 50,
+        Max = 1200,
+        Default = 50,
+    },
     Callback = function(value)
         Character.Humanoid.JumpPower = value
     end
@@ -124,8 +132,11 @@ PlayerTab:Toggle({
 
 PlayerTab:Slider({
     Title = "Velocidade RGB do carro",
-    Step = 0.01,
-    Value = { Min = 0.01, Max = 0.2, Default = 0.02 },
+    Value = {
+        Min = 0.01,
+        Max = 1,
+        Default = 0.01,
+    },
     Callback = function(val)
         _G.CarRGBSpeed = val
     end
