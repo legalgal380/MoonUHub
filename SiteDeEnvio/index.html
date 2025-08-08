@@ -1,703 +1,591 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoonU Hub - Mensagem Rápida</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChopBux - Painel de Preços</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
-      min-height: 100vh;
-      color: #eee;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px;
-      position: relative;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: #ffffff;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* Animated background particles */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(2px 2px at 20px 30px, rgba(192, 132, 252, 0.3), transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(168, 85, 247, 0.2), transparent),
-        radial-gradient(1px 1px at 90px 40px, rgba(192, 132, 252, 0.4), transparent),
-        radial-gradient(1px 1px at 130px 80px, rgba(168, 85, 247, 0.3), transparent);
-      background-size: 150px 150px;
-      animation: sparkle 20s linear infinite;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    @keyframes sparkle {
-      from { transform: translateY(0); }
-      to { transform: translateY(-150px); }
-    }
-
     .container {
-      max-width: 600px;
+      max-width: 900px;
       margin: 0 auto;
-      position: relative;
-      z-index: 1;
+      padding: 20px;
     }
 
     .header {
       text-align: center;
       margin-bottom: 40px;
-      animation: fadeInDown 1s ease-out;
+      position: relative;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #00ff88, #00ccff);
+      border-radius: 2px;
     }
 
     .logo {
       font-size: 3rem;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, #c084fc, #a855f7, #8b5cf6);
+      font-weight: bold;
+      background: linear-gradient(45deg, #00ff88, #00ccff, #ff6b6b);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      from { filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.5)); }
-      to { filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.8)); }
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
     }
 
     .subtitle {
-      font-size: 1.2rem;
-      color: #a0a0a0;
-      margin-bottom: 10px;
+      color: #aaa;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
     }
 
-    .status-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: #22c55e;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .form-card {
-      background: rgba(26, 26, 46, 0.6);
+    .form-container {
+      background: rgba(26, 26, 46, 0.8);
       backdrop-filter: blur(10px);
       border-radius: 20px;
-      padding: 40px;
-      box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(192, 132, 252, 0.1);
-      animation: fadeInUp 1s ease-out 0.3s both;
-      transition: all 0.3s ease;
-    }
-
-    .form-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(192, 132, 252, 0.2);
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 136, 0.1);
+      margin-bottom: 30px;
     }
 
     .form-group {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       position: relative;
     }
 
     label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 600;
-      color: #d1d5db;
-      font-size: 1rem;
       display: flex;
       align-items: center;
-      gap: 10px;
+      font-weight: 600;
+      color: #00ff88;
+      margin-bottom: 8px;
+      font-size: 1rem;
     }
 
-    .input-container {
-      position: relative;
+    label i {
+      margin-right: 8px;
+      width: 20px;
     }
 
     input, textarea {
       width: 100%;
-      padding: 16px 20px;
-      border: 2px solid rgba(75, 85, 99, 0.3);
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(0, 255, 136, 0.2);
       border-radius: 12px;
-      background: rgba(31, 41, 55, 0.8);
-      color: #fff;
-      font-size: 16px;
+      color: #ffffff;
+      font-size: 14px;
       transition: all 0.3s ease;
       font-family: inherit;
     }
 
     input:focus, textarea:focus {
       outline: none;
-      border-color: #c084fc;
-      background: rgba(31, 41, 55, 1);
-      box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.1);
+      border-color: #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
       transform: translateY(-2px);
     }
 
     textarea {
-      height: 120px;
+      min-height: 120px;
       resize: vertical;
-      min-height: 80px;
-      max-height: 300px;
+      line-height: 1.5;
     }
 
-    .char-counter {
-      position: absolute;
-      bottom: -25px;
-      right: 0;
-      font-size: 0.8rem;
-      color: #9ca3af;
-      transition: color 0.3s ease;
+    input::placeholder, textarea::placeholder {
+      color: #666;
     }
 
-    .char-counter.warning {
-      color: #f59e0b;
-    }
-
-    .char-counter.danger {
-      color: #ef4444;
-    }
-
-    .validation-message {
-      position: absolute;
-      bottom: -25px;
-      left: 0;
-      font-size: 0.8rem;
-      color: #ef4444;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-    }
-
-    .validation-message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .input-valid {
-      border-color: #10b981 !important;
-    }
-
-    .input-invalid {
-      border-color: #ef4444 !important;
-      animation: shake 0.5s ease-in-out;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-
-    .send-btn {
-      background: linear-gradient(135deg, #c084fc, #a855f7);
-      color: #fff;
-      padding: 18px 40px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .send-btn:hover:not(:disabled) {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 40px rgba(192, 132, 252, 0.4);
-    }
-
-    .send-btn:active:not(:disabled) {
-      transform: translateY(-1px);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .send-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .send-btn:hover::before {
-      left: 100%;
-    }
-
-    .loading-spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s linear infinite;
-      margin-right: 10px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .notification {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      padding: 16px 24px;
-      border-radius: 12px;
-      color: #fff;
-      font-weight: 600;
-      transform: translateX(100%);
-      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .notification.show {
-      transform: translateX(0);
-    }
-
-    .notification.success {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .notification.error {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(185, 28, 28, 0.9));
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 60px;
-      padding: 30px;
-      color: #6b7280;
-      font-size: 14px;
-      animation: fadeIn 1s ease-out 0.6s both;
-    }
-
-    .footer-content {
+    .button-container {
       display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
     }
 
-    .tech-badge {
-      display: inline-flex;
+    button {
+      background: linear-gradient(45deg, #00ff88, #00ccff);
+      border: none;
+      color: #000;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 12px;
-      background: rgba(75, 85, 99, 0.3);
-      border-radius: 20px;
-      font-size: 12px;
-      color: #d1d5db;
+      gap: 10px;
+      min-width: 180px;
+      justify-content: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    button:active {
+      transform: translateY(0);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .secondary-btn {
+      background: linear-gradient(45deg, #ff6b6b, #ffa500);
+    }
+
+    .secondary-btn:hover {
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+    }
+
+    .clear-btn {
+      background: linear-gradient(45deg, #666, #888);
+    }
+
+    .clear-btn:hover {
+      box-shadow: 0 10px 25px rgba(102, 102, 102, 0.4);
+    }
+
+    .preview-container {
+      background: rgba(26, 26, 46, 0.6);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0, 255, 136, 0.1);
+    }
+
+    .preview-title {
+      color: #00ff88;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .embed-preview {
+      background: #2f3136;
+      border-left: 4px solid #00ff88;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .embed-title {
+      color: #00aff4;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .embed-description {
+      color: #dcddde;
+      font-size: 14px;
+      line-height: 1.375;
+      white-space: pre-wrap;
+    }
+
+    .status-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-message.show {
+      transform: translateX(0);
+    }
+
+    .status-message.success {
+      background: linear-gradient(45deg, #00ff88, #00ccff);
+      color: #000;
+    }
+
+    .status-message.error {
+      background: linear-gradient(45deg, #ff6b6b, #ff4757);
+      color: #fff;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: #666;
+      font-size: 14px;
+      border-top: 1px solid rgba(0, 255, 136, 0.1);
+    }
+
+    .footer i {
+      color: #ff6b6b;
+      margin: 0 5px;
+    }
+
+    .tips-container {
+      background: rgba(0, 255, 136, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .tips-title {
+      color: #00ff88;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tips-content {
+      color: #ccc;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     @media (max-width: 768px) {
       .container {
-        max-width: 100%;
-        padding: 0 10px;
-      }
-      
-      .form-card {
-        padding: 30px 20px;
-        margin: 0 10px;
+        padding: 15px;
       }
       
       .logo {
         font-size: 2.5rem;
       }
       
-      .notification {
-        top: 20px;
-        right: 20px;
-        left: 20px;
-        transform: translateY(-100%);
+      .form-container {
+        padding: 20px;
       }
       
-      .notification.show {
-        transform: translateY(0);
+      .button-container {
+        flex-direction: column;
       }
+      
+      button {
+        min-width: 100%;
+      }
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .shape:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
     }
   </style>
 </head>
 <body>
+  <div class="floating-shapes">
+    <i class="fas fa-coins shape" style="font-size: 60px; color: #00ff88;"></i>
+    <i class="fab fa-discord shape" style="font-size: 50px; color: #7289da;"></i>
+    <i class="fas fa-bolt shape" style="font-size: 45px; color: #ffa500;"></i>
+  </div>
+
   <div class="container">
     <div class="header">
-      <div class="logo">🌙 MoonU Hub</div>
-      <div class="subtitle">Discord Webhook Sender</div>
-      <div class="status-indicator">
-        <div class="status-dot"></div>
-        Sistema Online
+      <div class="logo">
+        <i class="fas fa-gem"></i> ChopBux
+      </div>
+      <div class="subtitle">Painel de Atualização Profissional</div>
+    </div>
+
+    <div class="tips-container">
+      <div class="tips-title">
+        <i class="fas fa-lightbulb"></i> Dicas Rápidas
+      </div>
+      <div class="tips-content">
+        • Salve o webhook em um local seguro para reutilizar<br>
+        • Use **texto** para negrito e __texto__ para sublinhado no Discord<br>
+        • Teste primeiro em um canal privado antes de enviar publicamente
       </div>
     </div>
 
-    <div class="form-card">
-      <form id="webhookForm">
-        <div class="form-group">
-          <label for="webhook">
-            🔗 URL do Webhook Discord
-          </label>
-          <div class="input-container">
-            <input 
-              type="url" 
-              id="webhook" 
-              placeholder="https://discord.com/api/webhooks/..."
-              required
-            >
-            <div class="validation-message" id="webhookError"></div>
-          </div>
-        </div>
+    <div class="form-container">
+      <div class="form-group">
+        <label><i class="fas fa-link"></i> Webhook URL do Discord</label>
+        <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/..." />
+      </div>
 
-        <div class="form-group">
-          <label for="mensagem">
-            📝 Sua Mensagem
-          </label>
-          <div class="input-container">
-            <textarea 
-              id="mensagem" 
-              placeholder="Digite sua mensagem aqui..."
-              maxlength="2000"
-              required
-            ></textarea>
-            <div class="char-counter" id="charCounter">0/2000</div>
-            <div class="validation-message" id="messageError"></div>
-          </div>
-        </div>
+      <div class="form-group">
+        <label><i class="fas fa-heading"></i> Título da Mensagem</label>
+        <input type="text" id="titulo" value="🛒 ChopBux - Sua loja de Robux barata" />
+      </div>
 
-        <button type="submit" class="send-btn" id="sendBtn">
-          🚀 Enviar Mensagem
+      <div class="form-group">
+        <label><i class="fas fa-align-left"></i> Descrição Inicial</label>
+        <textarea id="descricao" placeholder="Digite a descrição...">Pagamento via **Pix** com entrega **100% garantida** e rápida.
+Ideal para quem quer economizar e ter Robux com segurança!
+
+__**💳 Formas de pagamento:**__
+• Pix (envio manual ou QR Code)</textarea>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-tag"></i> Lista de Preços</label>
+        <textarea id="precos" placeholder="• Preço = Quantidade...">• 💸 R$5 = 200 Robux
+• 💸 R$10 = 400 Robux
+• 💸 R$15 = 600 Robux
+• 💸 R$20 = 850 Robux
+• 💸 R$25 = 1100 Robux</textarea>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-signature"></i> Texto do Rodapé</label>
+        <input type="text" id="footer" value="Loja em funcionamento desde agosto de 2025 🚀" />
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-image"></i> URL da Imagem/Ícone</label>
+        <input type="text" id="icone" value="https://i.imgur.com/qndJ4uP.png" placeholder="https://exemplo.com/imagem.png" />
+      </div>
+
+      <div class="button-container">
+        <button onclick="enviarEmbed()">
+          <i class="fas fa-paper-plane"></i> Enviar para Discord
         </button>
-      </form>
+        <button class="secondary-btn" onclick="previewEmbed()">
+          <i class="fas fa-eye"></i> Visualizar Preview
+        </button>
+        <button class="clear-btn" onclick="limparCampos()">
+          <i class="fas fa-trash"></i> Limpar Campos
+        </button>
+      </div>
+    </div>
+
+    <div class="preview-container" id="previewContainer" style="display: none;">
+      <div class="preview-title">
+        <i class="fab fa-discord"></i> Preview do Embed
+      </div>
+      <div class="embed-preview" id="embedPreview"></div>
     </div>
 
     <div class="footer">
-      <div class="footer-content">
-        <span>MoonU Hub © 2025</span>
-        <div class="tech-badge">⚡ Powered by JavaScript</div>
-        <div class="tech-badge">🎨 Modern Design</div>
-        <div class="tech-badge">📱 Responsive</div>
-      </div>
+      Feito com <i class="fas fa-heart"></i> para o vendedor ChopBux 
+      <i class="fas fa-gem"></i>
     </div>
   </div>
 
+  <div id="statusMessage" class="status-message"></div>
+
   <script>
-    class MoonUHub {
-      constructor() {
-        this.form = document.getElementById('webhookForm');
-        this.webhookInput = document.getElementById('webhook');
-        this.messageInput = document.getElementById('mensagem');
-        this.sendBtn = document.getElementById('sendBtn');
-        this.charCounter = document.getElementById('charCounter');
-        
-        this.init();
-      }
+    // Salvar dados automaticamente no localStorage do navegador
+    function salvarDados() {
+      const dados = {
+        webhookUrl: document.getElementById("webhookUrl").value,
+        titulo: document.getElementById("titulo").value,
+        descricao: document.getElementById("descricao").value,
+        precos: document.getElementById("precos").value,
+        footer: document.getElementById("footer").value,
+        icone: document.getElementById("icone").value
+      };
+      // Nota: localStorage não funciona em artefatos do Claude, então mantemos em memória
+      window.dadosSalvos = dados;
+    }
 
-      init() {
-        this.setupEventListeners();
-        this.setupValidation();
-      }
-
-      setupEventListeners() {
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        this.messageInput.addEventListener('input', () => this.updateCharCounter());
-        this.webhookInput.addEventListener('input', () => this.validateWebhook());
-        this.messageInput.addEventListener('input', () => this.validateMessage());
-      }
-
-      setupValidation() {
-        this.updateCharCounter();
-      }
-
-      updateCharCounter() {
-        const length = this.messageInput.value.length;
-        const maxLength = 2000;
-        this.charCounter.textContent = `${length}/${maxLength}`;
-        
-        this.charCounter.className = 'char-counter';
-        if (length > maxLength * 0.8) {
-          this.charCounter.classList.add('warning');
-        }
-        if (length > maxLength * 0.95) {
-          this.charCounter.classList.add('danger');
-        }
-      }
-
-      validateWebhook() {
-        const webhook = this.webhookInput.value.trim();
-        const webhookError = document.getElementById('webhookError');
-        
-        if (!webhook) {
-          this.setInputState(this.webhookInput, 'neutral');
-          this.hideValidationMessage(webhookError);
-          return false;
-        }
-
-        const webhookRegex = /^https:\/\/discord\.com\/api\/webhooks\/\d+\/[\w-]+$/;
-        
-        if (webhookRegex.test(webhook)) {
-          this.setInputState(this.webhookInput, 'valid');
-          this.hideValidationMessage(webhookError);
-          return true;
-        } else {
-          this.setInputState(this.webhookInput, 'invalid');
-          this.showValidationMessage(webhookError, 'URL do webhook inválida');
-          return false;
-        }
-      }
-
-      validateMessage() {
-        const message = this.messageInput.value.trim();
-        const messageError = document.getElementById('messageError');
-        
-        if (!message) {
-          this.setInputState(this.messageInput, 'neutral');
-          this.hideValidationMessage(messageError);
-          return false;
-        }
-
-        if (message.length > 2000) {
-          this.setInputState(this.messageInput, 'invalid');
-          this.showValidationMessage(messageError, 'Mensagem muito longa (máx. 2000 caracteres)');
-          return false;
-        }
-
-        this.setInputState(this.messageInput, 'valid');
-        this.hideValidationMessage(messageError);
-        return true;
-      }
-
-      setInputState(input, state) {
-        input.classList.remove('input-valid', 'input-invalid');
-        if (state === 'valid') {
-          input.classList.add('input-valid');
-        } else if (state === 'invalid') {
-          input.classList.add('input-invalid');
-        }
-      }
-
-      showValidationMessage(element, message) {
-        element.textContent = message;
-        element.classList.add('show');
-      }
-
-      hideValidationMessage(element) {
-        element.classList.remove('show');
-      }
-
-      async handleSubmit(e) {
-        e.preventDefault();
-
-        const webhook = this.webhookInput.value.trim();
-        const message = this.messageInput.value.trim();
-
-        // Validate inputs
-        const webhookValid = this.validateWebhook();
-        const messageValid = this.validateMessage();
-
-        if (!webhookValid || !messageValid) {
-          this.showNotification('Por favor, corrija os erros antes de enviar', 'error');
-          return;
-        }
-
-        await this.sendMessage(webhook, message);
-      }
-
-      async sendMessage(webhook, message) {
-        this.setLoadingState(true);
-
-        try {
-          const payload = {
-            username: "MoonU Hub 🌙",
-            avatar_url: "https://i.imgur.com/G7QKqqp.png",
-            content: message,
-            embeds: [{
-              color: 0xc084fc,
-              timestamp: new Date().toISOString(),
-              footer: {
-                text: "Enviado via MoonU Hub"
-              }
-            }]
-          };
-
-          const response = await fetch(webhook, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-          });
-
-          if (response.ok) {
-            this.showNotification('✅ Mensagem enviada com sucesso!', 'success');
-            this.messageInput.value = '';
-            this.updateCharCounter();
-            this.setInputState(this.messageInput, 'neutral');
-          } else if (response.status === 429) {
-            this.showNotification('⏰ Limite de taxa atingido. Tente novamente em alguns segundos.', 'error');
-          } else {
-            throw new Error(`HTTP ${response.status}`);
-          }
-        } catch (error) {
-          console.error('Erro ao enviar mensagem:', error);
-          this.showNotification('❌ Erro ao enviar mensagem. Verifique o webhook.', 'error');
-        } finally {
-          this.setLoadingState(false);
-        }
-      }
-
-      setLoadingState(loading) {
-        if (loading) {
-          this.sendBtn.disabled = true;
-          this.sendBtn.innerHTML = '<div class="loading-spinner"></div>Enviando...';
-        } else {
-          this.sendBtn.disabled = false;
-          this.sendBtn.innerHTML = '🚀 Enviar Mensagem';
-        }
-      }
-
-      showNotification(message, type) {
-        // Remove any existing notifications
-        const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-          existingNotification.remove();
-        }
-
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        // Trigger animation
-        setTimeout(() => {
-          notification.classList.add('show');
-        }, 100);
-
-        // Auto remove after 4 seconds
-        setTimeout(() => {
-          notification.classList.remove('show');
-          setTimeout(() => {
-            notification.remove();
-          }, 400);
-        }, 4000);
+    function carregarDados() {
+      if (window.dadosSalvos) {
+        const dados = window.dadosSalvos;
+        document.getElementById("webhookUrl").value = dados.webhookUrl || "";
+        document.getElementById("titulo").value = dados.titulo || "🛒 ChopBux - Sua loja de Robux barata";
+        document.getElementById("descricao").value = dados.descricao || "";
+        document.getElementById("precos").value = dados.precos || "";
+        document.getElementById("footer").value = dados.footer || "Loja em funcionamento desde agosto de 2025 🚀";
+        document.getElementById("icone").value = dados.icone || "https://i.imgur.com/qndJ4uP.png";
       }
     }
 
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', () => {
-      new MoonUHub();
-    });
+    // Auto-salvar quando o usuário digita
+    document.addEventListener('input', salvarDados);
 
-    // Add some interactive particles on click
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('send-btn')) return;
-      
-      const particle = document.createElement('div');
-      particle.style.position = 'fixed';
-      particle.style.left = e.clientX + 'px';
-      particle.style.top = e.clientY + 'px';
-      particle.style.width = '6px';
-      particle.style.height = '6px';
-      particle.style.background = '#c084fc';
-      particle.style.borderRadius = '50%';
-      particle.style.pointerEvents = 'none';
-      particle.style.animation = 'particleAnimation 1s ease-out forwards';
-      particle.style.zIndex = '9999';
-      
-      document.body.appendChild(particle);
+    function mostrarStatus(mensagem, tipo) {
+      const statusEl = document.getElementById('statusMessage');
+      statusEl.textContent = mensagem;
+      statusEl.className = `status-message ${tipo} show`;
       
       setTimeout(() => {
-        particle.remove();
-      }, 1000);
-    });
+        statusEl.classList.remove('show');
+      }, 4000);
+    }
 
-    // Add particle animation keyframes
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes particleAnimation {
-        0% {
-          transform: scale(1) translate(0, 0);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(0) translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
-          opacity: 0;
-        }
+    function previewEmbed() {
+      const titulo = document.getElementById("titulo").value;
+      const descricao = document.getElementById("descricao").value;
+      const precos = document.getElementById("precos").value;
+      const footer = document.getElementById("footer").value;
+
+      const conteudoCompleto = `${descricao}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• Entre 5 e 20 minutos\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\nAbra um ticket ou chame no privado 📩`;
+
+      const previewContainer = document.getElementById("previewContainer");
+      const embedPreview = document.getElementById("embedPreview");
+      
+      embedPreview.innerHTML = `
+        <div class="embed-title">${titulo}</div>
+        <div class="embed-description">${conteudoCompleto}</div>
+        <div style="margin-top: 15px; font-size: 12px; color: #72767d;">${footer}</div>
+      `;
+      
+      previewContainer.style.display = "block";
+      previewContainer.scrollIntoView({ behavior: 'smooth' });
+      
+      mostrarStatus("Preview gerado com sucesso!", "success");
+    }
+
+    function limparCampos() {
+      if (confirm("Tem certeza que deseja limpar todos os campos?")) {
+        document.getElementById("webhookUrl").value = "";
+        document.getElementById("titulo").value = "🛒 ChopBux - Sua loja de Robux barata";
+        document.getElementById("descricao").value = `Pagamento via **Pix** com entrega **100% garantida** e rápida.
+Ideal para quem quer economizar e ter Robux com segurança!
+
+__**💳 Formas de pagamento:**__
+• Pix (envio manual ou QR Code)`;
+        document.getElementById("precos").value = `• 💸 R$5 = 200 Robux
+• 💸 R$10 = 400 Robux
+• 💸 R$15 = 600 Robux
+• 💸 R$20 = 850 Robux
+• 💸 R$25 = 1100 Robux`;
+        document.getElementById("footer").value = "Loja em funcionamento desde agosto de 2025 🚀";
+        document.getElementById("icone").value = "https://i.imgur.com/qndJ4uP.png";
+        
+        document.getElementById("previewContainer").style.display = "none";
+        mostrarStatus("Campos limpos com sucesso!", "success");
+        salvarDados();
       }
-    `;
-    document.head.appendChild(style);
+    }
+
+    function enviarEmbed() {
+      const webhookUrl = document.getElementById("webhookUrl").value.trim();
+      const titulo = document.getElementById("titulo").value;
+      const descricao = document.getElementById("descricao").value;
+      const precos = document.getElementById("precos").value;
+      const footer = document.getElementById("footer").value;
+      const icone = document.getElementById("icone").value;
+
+      if (!webhookUrl) {
+        mostrarStatus("❌ Por favor, cole o link do webhook!", "error");
+        document.getElementById("webhookUrl").focus();
+        return;
+      }
+
+      if (!titulo.trim()) {
+        mostrarStatus("❌ Por favor, adicione um título!", "error");
+        document.getElementById("titulo").focus();
+        return;
+      }
+
+      const button = event.target;
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+      const embed = {
+        username: "ChopBux",
+        avatar_url: icone || "https://i.imgur.com/qndJ4uP.png",
+        embeds: [
+          {
+            title: titulo,
+            description: `${descricao}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• Entre 5 e 20 minutos\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\nAbra um ticket ou chame no privado 📩`,
+            color: 65280, // Verde
+            footer: {
+              text: footer,
+              icon_url: icone || "https://i.imgur.com/qndJ4uP.png"
+            },
+            thumbnail: {
+              url: icone || "https://i.imgur.com/qndJ4uP.png"
+            },
+            timestamp: new Date().toISOString()
+          }
+        ]
+      };
+
+      fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(embed)
+      })
+      .then(response => {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar para Discord';
+        
+        if (response.ok) {
+          mostrarStatus("✅ Mensagem enviada com sucesso para o Discord!", "success");
+          salvarDados();
+        } else {
+          throw new Error('Erro na resposta do webhook');
+        }
+      })
+      .catch(error => {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar para Discord';
+        mostrarStatus("❌ Erro ao enviar. Verifique o link do webhook!", "error");
+        console.error('Erro:', error);
+      });
+    }
+
+    // Carregar dados salvos ao inicializar
+    window.addEventListener('load', carregarDados);
   </script>
 </body>
 </html>
