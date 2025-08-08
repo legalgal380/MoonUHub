@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar para Discord</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stripe {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, #5865f2 0%, #7289da 100%);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #5865f2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .discord-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #5865f2;
+        }
+
+        .discord-info h3 {
+            color: #5865f2;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .discord-info p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stripe"></div>
+        
+        <div class="header">
+            <h1>🚀 Discord Sender</h1>
+            <p>Envie mensagens direto para o Discord</p>
+        </div>
+
+        <div class="discord-info">
+            <h3>📢 Como funciona</h3>
+            <p>Digite sua mensagem abaixo e ela será enviada automaticamente para o canal do Discord configurado!</p>
+        </div>
+
+        <form id="webhookForm">
+            <div class="form-group">
+                <label for="username">👤 Nome de usuário (opcional)</label>
+                <input type="text" id="username" placeholder="Seu nome...">
+            </div>
+
+            <div class="form-group">
+                <label for="message">💬 Mensagem</label>
+                <textarea id="message" placeholder="Digite sua mensagem aqui..." required></textarea>
+            </div>
+
+            <button type="submit" class="send-btn">
+                Enviar para Discord
+            </button>
+        </form>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://discord.com/api/webhooks/1403396154607014009/4PTboKz34id77bVaj5wkpHpblLdFTSVn_LaSsF3rB-76npF53KpXUGxAKoBCHdI8iz5h';
+        
+        document.getElementById('webhookForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const statusDiv = document.getElementById('status');
+            const submitBtn = document.querySelector('.send-btn');
+            
+            if (!message) {
+                showStatus('Por favor, digite uma mensagem!', 'error');
+                return;
+            }
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            
+            try {
+                const payload = {
+                    content: message
+                };
+                
+                // Add username if provided
+                if (username) {
+                    payload.username = username;
+                }
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    showStatus('✅ Mensagem enviada com sucesso!', 'success');
+                    document.getElementById('message').value = '';
+                } else {
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                console.error('Erro ao enviar:', error);
+                showStatus('❌ Erro ao enviar mensagem. Tente novamente.', 'error');
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar para Discord';
+            }
+        });
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Add some interactivity to the textarea
+        const textarea = document.getElementById('message');
+        textarea.addEventListener('input', function() {
+            // Auto-resize textarea
+            this.style.height = 'auto';
+            this.style.height = Math.max(120, this.scrollHeight) + 'px';
+        });
+    </script>
+</body>
+</html>
