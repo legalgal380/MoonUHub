@@ -397,7 +397,22 @@ __**💳 Formas de pagamento:**__
 
       <div class="form-group">
         <label><i class="fas fa-image"></i> URL da Imagem/Ícone</label>
-        <input type="text" id="icone" value="https://i.imgur.com/qndJ4uP.png" placeholder="https://exemplo.com/imagem.png" />
+        <input type="text" id="icone" placeholder="https://exemplo.com/imagem.png" />
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-percent"></i> Percentual de Desconto (%)</label>
+        <input type="number" id="desconto" value="25" min="0" max="100" placeholder="25" />
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-clock"></i> Tempo de Entrega</label>
+        <input type="text" id="tempoEntrega" value="5 a 20 minutos" placeholder="Ex: 5 a 20 minutos" />
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-info-circle"></i> Informações de Contato</label>
+        <input type="text" id="contato" value="Abra um ticket ou chame no privado 📩" placeholder="Como entrar em contato" />
       </div>
 
       <div class="button-container">
@@ -421,6 +436,10 @@ __**💳 Formas de pagamento:**__
     </div>
 
     <div class="footer">
+      <div style="background: linear-gradient(45deg, #ff6b6b, #ffa500); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold;">
+        <i class="fas fa-fire"></i> OFERTA ESPECIAL: 25% DE DESCONTO EM TODOS OS PACOTES! <i class="fas fa-fire"></i>
+        <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;">Por tempo limitado - Aproveite agora!</div>
+      </div>
       Feito com <i class="fas fa-heart"></i> para o vendedor ChopBux 
       <i class="fas fa-gem"></i>
     </div>
@@ -429,7 +448,7 @@ __**💳 Formas de pagamento:**__
   <div id="statusMessage" class="status-message"></div>
 
   <script>
-    // Salvar dados automaticamente no localStorage do navegador
+    // Salvar dados automaticamente
     function salvarDados() {
       const dados = {
         webhookUrl: document.getElementById("webhookUrl").value,
@@ -437,9 +456,11 @@ __**💳 Formas de pagamento:**__
         descricao: document.getElementById("descricao").value,
         precos: document.getElementById("precos").value,
         footer: document.getElementById("footer").value,
-        icone: document.getElementById("icone").value
+        icone: document.getElementById("icone").value,
+        desconto: document.getElementById("desconto").value,
+        tempoEntrega: document.getElementById("tempoEntrega").value,
+        contato: document.getElementById("contato").value
       };
-      // Nota: localStorage não funciona em artefatos do Claude, então mantemos em memória
       window.dadosSalvos = dados;
     }
 
@@ -451,7 +472,10 @@ __**💳 Formas de pagamento:**__
         document.getElementById("descricao").value = dados.descricao || "";
         document.getElementById("precos").value = dados.precos || "";
         document.getElementById("footer").value = dados.footer || "Loja em funcionamento desde agosto de 2025 🚀";
-        document.getElementById("icone").value = dados.icone || "https://i.imgur.com/qndJ4uP.png";
+        document.getElementById("icone").value = dados.icone || "";
+        document.getElementById("desconto").value = dados.desconto || "25";
+        document.getElementById("tempoEntrega").value = dados.tempoEntrega || "5 a 20 minutos";
+        document.getElementById("contato").value = dados.contato || "Abra um ticket ou chame no privado 📩";
       }
     }
 
@@ -473,8 +497,16 @@ __**💳 Formas de pagamento:**__
       const descricao = document.getElementById("descricao").value;
       const precos = document.getElementById("precos").value;
       const footer = document.getElementById("footer").value;
+      const desconto = document.getElementById("desconto").value;
+      const tempoEntrega = document.getElementById("tempoEntrega").value;
+      const contato = document.getElementById("contato").value;
 
-      const conteudoCompleto = `${descricao}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• Entre 5 e 20 minutos\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\nAbra um ticket ou chame no privado 📩`;
+      let descontoTexto = "";
+      if (desconto && parseInt(desconto) > 0) {
+        descontoTexto = `\n\n🔥 **DESCONTO ESPECIAL: ${desconto}% OFF EM TODOS OS PACOTES!** 🔥\n_Oferta por tempo limitado - Aproveite agora!_`;
+      }
+
+      const conteudoCompleto = `${descricao}${descontoTexto}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• ${tempoEntrega}\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\n${contato}`;
 
       const previewContainer = document.getElementById("previewContainer");
       const embedPreview = document.getElementById("embedPreview");
@@ -506,7 +538,10 @@ __**💳 Formas de pagamento:**__
 • 💸 R$20 = 850 Robux
 • 💸 R$25 = 1100 Robux`;
         document.getElementById("footer").value = "Loja em funcionamento desde agosto de 2025 🚀";
-        document.getElementById("icone").value = "https://i.imgur.com/qndJ4uP.png";
+        document.getElementById("icone").value = "";
+        document.getElementById("desconto").value = "25";
+        document.getElementById("tempoEntrega").value = "5 a 20 minutos";
+        document.getElementById("contato").value = "Abra um ticket ou chame no privado 📩";
         
         document.getElementById("previewContainer").style.display = "none";
         mostrarStatus("Campos limpos com sucesso!", "success");
@@ -521,6 +556,9 @@ __**💳 Formas de pagamento:**__
       const precos = document.getElementById("precos").value;
       const footer = document.getElementById("footer").value;
       const icone = document.getElementById("icone").value;
+      const desconto = document.getElementById("desconto").value;
+      const tempoEntrega = document.getElementById("tempoEntrega").value;
+      const contato = document.getElementById("contato").value;
 
       if (!webhookUrl) {
         mostrarStatus("❌ Por favor, cole o link do webhook!", "error");
@@ -538,21 +576,26 @@ __**💳 Formas de pagamento:**__
       button.disabled = true;
       button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
+      let descontoTexto = "";
+      if (desconto && parseInt(desconto) > 0) {
+        descontoTexto = `\n\n🔥 **DESCONTO ESPECIAL: ${desconto}% OFF EM TODOS OS PACOTES!** 🔥\n_Oferta por tempo limitado - Aproveite agora!_`;
+      }
+
       const embed = {
         username: "ChopBux",
-        avatar_url: icone || "https://i.imgur.com/qndJ4uP.png",
+        avatar_url: icone || undefined,
         embeds: [
           {
             title: titulo,
-            description: `${descricao}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• Entre 5 e 20 minutos\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\nAbra um ticket ou chame no privado 📩`,
+            description: `${descricao}${descontoTexto}\n\n__**📦 Lista de preços:**__\n${precos}\n\n__**⏱ Entrega:**__\n• ${tempoEntrega}\n• Envio por grupo ou gamepass (você escolhe!)\n\n__**❓ Dúvidas ou pedido:**__\n${contato}`,
             color: 65280, // Verde
             footer: {
               text: footer,
-              icon_url: icone || "https://i.imgur.com/qndJ4uP.png"
+              icon_url: icone || undefined
             },
-            thumbnail: {
-              url: icone || "https://i.imgur.com/qndJ4uP.png"
-            },
+            thumbnail: icone ? {
+              url: icone
+            } : undefined,
             timestamp: new Date().toISOString()
           }
         ]
